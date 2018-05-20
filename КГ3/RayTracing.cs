@@ -98,3 +98,13 @@ namespace КГ3
         }
     }
 }
+
+/*cos = Ray.origin.x * ray.direction.x + Ray.origin.y * ray.direction.y Ray.origin.z * ray.direction.z / 
+									(sqrt(Ray.origin.x * Ray.origin.x + Ray.origin.y * Ray.origin.y + Ray.origin.z * Ray.origin.z) 
+									* sqrt(Ray.direction.x * Ray.direction.x + Ray.direction.y * Ray.direction.y + Ray.direction.z * Ray.direction.z));  
+			
+     
+     	cos = ray.origin.x * ray.direction[0] + ray.origin[1] * ray.direction[1] + ray.origin[2] * ray.direction[2] / 
+									(sqrt(ray.origin[0] * ray.origin[0] + ray.origin[1] * ray.origin[1] + ray.origin[2] * ray.origin[2]) 
+									* sqrt(ray.direction[0] * ray.direction[0] + ray.direction[1] * ray.direction[1] + ray.direction[2] * ray.direction[2]));  
+			*/

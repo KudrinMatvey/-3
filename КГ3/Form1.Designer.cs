@@ -37,7 +37,7 @@
             this.glControl1.Location = new System.Drawing.Point(13, 13);
             this.glControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.glControl1.Name = "glControl1";
-            this.glControl1.Size = new System.Drawing.Size(256, 227);
+            this.glControl1.Size = new System.Drawing.Size(750, 515);
             this.glControl1.TabIndex = 0;
             this.glControl1.VSync = false;
             this.glControl1.Load += new System.EventHandler(this.glControl1_Load);
@@ -47,7 +47,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(282, 253);
+            this.ClientSize = new System.Drawing.Size(776, 541);
             this.Controls.Add(this.glControl1);
             this.Name = "Form1";
             this.Text = "Form1";

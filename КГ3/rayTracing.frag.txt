@@ -33,11 +33,13 @@ struct HitInfo
 
 const int Max_Depth = 5;
 const int Max_Nodes = 64;
-
+const int sphereNumber = 2;
+Sphere spheres[sphereNumber];
 RayNode rayNode[Max_Nodes];
 
-void sphereIntersect(Ray ray, Sphere sphere, inout HitInfo hitInfo)
+void sphereIntersect(Ray ray, int objectid, inout HitInfo hitInfo)
 {
+	Sphere sphere = spheres[objectid];
 	vec3 trackToSphere = ray.origin - sphere.position;
 	float a = dot(ray.direction,ray.direction);
 	float b = 2 * dot(trackToSphere,ray.direction);
@@ -58,12 +60,11 @@ void sphereIntersect(Ray ray, Sphere sphere, inout HitInfo hitInfo)
 }
 vec3 iterativeRayTrace(Ray ray)
 {
-	Sphere sphere;
-	sphere.position = vec3(0.0,0.0, -1.0);
-	sphere.radius = 0.5;
-	sphere.color = vec3(0.9,0.5,0.7);
+	spheres[0].position = vec3(0.0,0.0, -1.0);
+	spheres[0].radius = 0.5;
+	spheres[0].color = vec3(0.9,0.5,0.7);
 	int numberOfNodes = 1, currentNodeIndex = 0;
-
+	float cos;
 	rayNode[currentNodeIndex].ray = ray;
 	rayNode[currentNodeIndex].depth = 0;
 
@@ -71,11 +72,19 @@ vec3 iterativeRayTrace(Ray ray)
 	{			
 		HitInfo hitInfo;
 		hitInfo.hitDetected = false;
-		sphereIntersect(ray,sphere,hitInfo);
+		sphereIntersect(ray,0,hitInfo);
 		
 		if(hitInfo.hitDetected)
 		{
-			rayNode[currentNodeIndex].color = sphere.color;			
+		cos = 0.5f;
+			cos = (ray.direction.x * hitInfo.surfaceNormal.x + ray.direction.y * hitInfo.surfaceNormal.y + ray.direction.z * hitInfo.surfaceNormal.z + 1) /  
+									(sqrt(ray.direction.x * ray.direction.x + ray.direction.y * ray.direction.y + ray.direction.z * ray.direction.z)
+									* sqrt(hitInfo.surfaceNormal.x * hitInfo.surfaceNormal.x + hitInfo.surfaceNormal.y * hitInfo.surfaceNormal.y + hitInfo.surfaceNormal.z * hitInfo.surfaceNormal.z));  
+		//cos = ray.origin.x * ray.direction.x + ray.origin.y * ray.direction.y + ray.origin.z * ray.direction.z / 
+			//						(sqrt(ray.origin.x * ray.origin.x + ray.origin.y * ray.origin.y + ray.origin.z * ray.origin.z) 
+				//					* sqrt(ray.direction.x * ray.direction.x + ray.direction.y * ray.direction.y + ray.direction.z * ray.direction.z));  
+			
+			rayNode[currentNodeIndex].color = vec3(spheres[0].color.x * cos,spheres[0].color.y * cos,spheres[0].color.z * cos);			
 		}
 		else break;
 		currentNodeIndex++;
