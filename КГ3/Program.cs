@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using OpenTK;
+using OpenTK.Graphics.OpenGL;
+using System.Drawing.Imaging;
 
 namespace КГ3
 {
+    
     static class Program
     {
         /// <summary>
