@@ -31,12 +31,12 @@ struct HitInfo
 	float distance;
 };
 
-cont int Max_Depth = 5;
-cont int Max_Nodes = 64;
+const int Max_Depth = 5;
+const int Max_Nodes = 64;
 
 RayNode rayNode[Max_Nodes];
 
-void sphereIntersect(Ray ray, Sphere sphere, inout HitInfo hitinfo)
+void sphereIntersect(Ray ray, Sphere sphere, inout HitInfo hitInfo)
 {
 	vec3 trackToSphere = ray.origin - sphere.position;
 	float a = dot(ray.direction,ray.direction);
