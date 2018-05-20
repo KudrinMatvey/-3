@@ -22,12 +22,12 @@ namespace КГ3
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            rayTracing.Resize(glControl1.Width, glControl1.Height);
+
         }
 
         private void glControl1_Load(object sender, EventArgs e)
         {
-            
+            rayTracing.Resize(glControl1.Width, glControl1.Height);
         }
 
         private void Application_Idle(object sender, PaintEventArgs e)
@@ -39,9 +39,9 @@ namespace КГ3
 
         private void glControl1_Paint(object sender, PaintEventArgs e)
         {
-               rayTracing.Update();
-               glControl1.SwapBuffers();
-               rayTracing.closeProgram();
+            rayTracing.Update();
+            glControl1.SwapBuffers();
+            rayTracing.CloseProgram();
         }
     }
 }
