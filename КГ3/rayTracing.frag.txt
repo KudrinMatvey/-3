@@ -3,6 +3,10 @@
 in vec3 origin,direction;
 out vec4 outputColor;
 
+struct Triangle
+{
+	vec3 a,b,c;	
+};
 struct Sphere
 {
 	vec3 position;
@@ -29,14 +33,39 @@ struct HitInfo
 	vec3 hitPoint;
 	vec3 surfaceNormal;
 	float distance;
+	int objectid;
 };
 
 const int Max_Depth = 5;
 const int Max_Nodes = 64;
 const int sphereNumber = 2;
+const int triangleNumber = 1;
+Triangle triangles[triangleNumber];
 Sphere spheres[sphereNumber];
 RayNode rayNode[Max_Nodes];
 
+void triangleIntersect(Ray ray, int objectid,inout HitInfo hitInfo)
+{
+	triangle = triangles[objectid];
+	vec3 a,b,n;
+	a = triangle.a - ray.origin;
+	b = triangle.b - ray.origin;
+	n = cross(a,b)
+	float ip1 = dot(ray.direction,n);
+	
+	a = triangle.b - ray.origin;
+	b = triangle.c - ray.origin;
+	n = cross(a,b)
+	float ip2 = dot(ray.direction,n);
+	
+	a = triangle.c - ray.origin;
+	b = triangle.a - ray.origin;
+	n = cross(a,b)
+	float ip3 = dot(ray.direction,n);
+	
+	if(!(((ip1 <= 0) && (ip2 <= 0) && (ip3 <= 0))|| ((ip1 >= 0) && (ip2 >= 0) && (ip3 >= 0))))
+		return;
+}
 void sphereIntersect(Ray ray, int objectid, inout HitInfo hitInfo)
 {
 	Sphere sphere = spheres[objectid];
@@ -55,6 +84,7 @@ void sphereIntersect(Ray ray, int objectid, inout HitInfo hitInfo)
 			hitInfo.hitPoint = ray.origin + ray.direction * hitInfo.distance;
 			hitInfo.surfaceNormal = normalize(hitInfo.hitPoint - sphere.position);
 			hitInfo.hitDetected = true;
+			hitInfo.objectid = objectid;
 		}
 	}
 }
@@ -63,6 +93,11 @@ vec3 iterativeRayTrace(Ray ray)
 	spheres[0].position = vec3(0.0,0.0, -1.0);
 	spheres[0].radius = 0.5;
 	spheres[0].color = vec3(0.9,0.5,0.7);
+
+	spheres[1].position = vec3(1.1,1.1, -2.0);
+	spheres[1].radius = 1.5;
+	spheres[1].color = vec3(0.5,0.5,0.7);
+
 	int numberOfNodes = 1, currentNodeIndex = 0;
 	float cos;
 	rayNode[currentNodeIndex].ray = ray;
@@ -72,7 +107,9 @@ vec3 iterativeRayTrace(Ray ray)
 	{			
 		HitInfo hitInfo;
 		hitInfo.hitDetected = false;
-		sphereIntersect(ray,0,hitInfo);
+		for(int i = 0;i<sphereNumber;i++){
+		sphereIntersect(ray,i,hitInfo);
+		}
 		
 		if(hitInfo.hitDetected)
 		{
@@ -80,11 +117,8 @@ vec3 iterativeRayTrace(Ray ray)
 			cos = (ray.direction.x * hitInfo.surfaceNormal.x + ray.direction.y * hitInfo.surfaceNormal.y + ray.direction.z * hitInfo.surfaceNormal.z + 1) /  
 									(sqrt(ray.direction.x * ray.direction.x + ray.direction.y * ray.direction.y + ray.direction.z * ray.direction.z)
 									* sqrt(hitInfo.surfaceNormal.x * hitInfo.surfaceNormal.x + hitInfo.surfaceNormal.y * hitInfo.surfaceNormal.y + hitInfo.surfaceNormal.z * hitInfo.surfaceNormal.z));  
-		//cos = ray.origin.x * ray.direction.x + ray.origin.y * ray.direction.y + ray.origin.z * ray.direction.z / 
-			//						(sqrt(ray.origin.x * ray.origin.x + ray.origin.y * ray.origin.y + ray.origin.z * ray.origin.z) 
-				//					* sqrt(ray.direction.x * ray.direction.x + ray.direction.y * ray.direction.y + ray.direction.z * ray.direction.z));  
-			
-			rayNode[currentNodeIndex].color = vec3(spheres[0].color.x * cos,spheres[0].color.y * cos,spheres[0].color.z * cos);			
+		
+			rayNode[currentNodeIndex].color = spheres[hitInfo.objectid].color * cos;
 		}
 		else break;
 		currentNodeIndex++;
