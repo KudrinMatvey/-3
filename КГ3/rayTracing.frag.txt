@@ -6,37 +6,24 @@ out vec4 outputColor;
 struct Triangle
 {
 	vec3 a,b,c;	
-	Material material;
 };
 struct Sphere
 {
 	vec3 position;
 	float radius;
 	vec3 color;
-	//Material material;
 };
-struct Material
-{
-	vec3 ambiant,diffuse,refletion,specular,transparancy,emission,atenuation;
-	float refractionCoef, shiness;
-	
-};
+
 struct Ray
 {
 	vec3 origin;
 	vec3 direction;
-	int type;
 };
-const int TYPE_DIFFUSE = 1;
-const int TYPE_SHADOW = 2;
-const int TYPE_REFLECTION = 3;
-const int TYPE_TRANSPARANCY = 4;
 
 struct RayNode
 {
 	Ray ray;
-	vec3 refletionColor,refractionColor,diffuseColor,specular,refletion,refraction;
-	int parentIndex;
+	vec3 color;
 	int depth;
 };
 
@@ -47,14 +34,10 @@ struct HitInfo
 	vec3 surfaceNormal;
 	float distance;
 	int objectid;
-	int objectType;
 };
-const int TYPE_SPHERE = 1;
-const int TYPE_TRIANGLE = 2;
 
 const int Max_Depth = 5;
 const int Max_Nodes = 64;
-
 const int sphereNumber = 2;
 const int triangleNumber = 1;
 Triangle triangles[triangleNumber];
@@ -63,25 +46,25 @@ RayNode rayNode[Max_Nodes];
 
 void triangleIntersect(Ray ray, int objectid,inout HitInfo hitInfo)
 {
-	triangle = triangles[objectid];
-	vec3 a,b,n;
-	a = triangle.a - ray.origin;
-	b = triangle.b - ray.origin;
-	n = cross(a,b)
-	float ip1 = dot(ray.direction,n);
+//	Triangle triangle = triangles[objectid];
+//	vec3 a,b,n;
+//	a = triangle.a - ray.origin;
+//	b = triangle.b - ray.origin;
+//	n = cross(a,b)
+//	float ip1 = dot(ray.direction,n);
 	
-	a = triangle.b - ray.origin;
-	b = triangle.c - ray.origin;
-	n = cross(a,b)
-	float ip2 = dot(ray.direction,n);
+//	a = triangle.b - ray.origin;
+//	b = triangle.c - ray.origin;
+//	n = cross(a,b)
+//	float ip2 = dot(ray.direction,n);
 	
-	a = triangle.c - ray.origin;
-	b = triangle.a - ray.origin;
-	n = cross(a,b)
-	float ip3 = dot(ray.direction,n);
+//	a = triangle.c - ray.origin;
+//	b = triangle.a - ray.origin;
+//	n = cross(a,b)
+//	float ip3 = dot(ray.direction,n);
 	
-	if(!(((ip1 <= 0) && (ip2 <= 0) && (ip3 <= 0))|| ((ip1 >= 0) && (ip2 >= 0) && (ip3 >= 0))))
-		return;
+//	if(!(((ip1 <= 0) && (ip2 <= 0) && (ip3 <= 0))|| ((ip1 >= 0) && (ip2 >= 0) && (ip3 >= 0))))
+//		return;
 }
 void sphereIntersect(Ray ray, int objectid, inout HitInfo hitInfo)
 {
@@ -125,36 +108,16 @@ vec3 iterativeRayTrace(Ray ray)
 		HitInfo hitInfo;
 		hitInfo.hitDetected = false;
 		for(int i = 0;i<sphereNumber;i++){
-		sphereIntersect(ray[currentNodeIndex],i,hitInfo);
-		}
-		for(int i = 0;i<triangleNumber;i++){
-		triangleIntersect(ray[currentNodeIndex],i,hitInfo);
+		sphereIntersect(ray,i,hitInfo);
 		}
 		
 		if(hitInfo.hitDetected)
 		{
-			Material material;
-			switch(hitInfo.objectType)
-			{
-				case TYPE_SPHERE : material = spheres[hitInfo.objectid].material; break;
-				case TYPE_TRIANGLE : material = triangles[hitInfo.objectid].material; break;				
-			}
-			
-			rayNode[currentNodeIndex].specular = material.specular;			
-			rayNode[currentNodeIndex].refletion = material.refletion;
-			rayNode[currentNodeIndex].refraction = material.transparancy;
-			
-			if(length(material.refletion) > 0.0 && rayNode[currentNodeIndex].ray.direction< Max_Depth);
-			{
-				vec3 refletionDir = normalize(reflect(rayNode[currentNodeIndex].ray.direction,hitInfo.surfaceNormal));
-				
-			}
-			
 		cos = 0.5f;
 			cos = (ray.direction.x * hitInfo.surfaceNormal.x + ray.direction.y * hitInfo.surfaceNormal.y + ray.direction.z * hitInfo.surfaceNormal.z + 1) /  
 									(sqrt(ray.direction.x * ray.direction.x + ray.direction.y * ray.direction.y + ray.direction.z * ray.direction.z)
 									* sqrt(hitInfo.surfaceNormal.x * hitInfo.surfaceNormal.x + hitInfo.surfaceNormal.y * hitInfo.surfaceNormal.y + hitInfo.surfaceNormal.z * hitInfo.surfaceNormal.z));  
-		
+		cos = (dot(ray.direction,hitInfo.surfaceNormal)*dot(ray.direction,hitInfo.surfaceNormal)) /(( dot(ray.direction,ray.direction)*dot(hitInfo.surfaceNormal,hitInfo.surfaceNormal)));
 			rayNode[currentNodeIndex].color = spheres[hitInfo.objectid].color * cos;
 		}
 		else break;
