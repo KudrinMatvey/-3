@@ -76,7 +76,8 @@ namespace КГ3
 
         public void Update()
         {
-
+           // float radius = 0.8f;
+            float radius = 0.5f;
             cameraPosition = new Vector3(0.0f, 0.0f, 0.3f);
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
@@ -86,6 +87,7 @@ namespace КГ3
 
             GL.UseProgram(BasicProgramID);
             GL.Uniform1(GL.GetUniformLocation(BasicProgramID, "aspect"), aspect);
+            GL.Uniform1(GL.GetUniformLocation(BasicProgramID, "r"), radius);
 
             GL.Uniform3(GL.GetUniformLocation(BasicProgramID, "campos"), cameraPosition);
             GL.DrawArrays(PrimitiveType.Quads, 0, 4);

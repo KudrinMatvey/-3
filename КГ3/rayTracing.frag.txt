@@ -1,6 +1,7 @@
 ﻿#version 430
 
 in vec3 origin,direction;
+in float radius;
 out vec4 outputColor;
 
 struct Triangle
@@ -91,7 +92,7 @@ void sphereIntersect(Ray ray, int objectid, inout HitInfo hitInfo)
 vec3 iterativeRayTrace(Ray ray)
 {
 	spheres[0].position = vec3(0.0,0.0, -1.0);
-	spheres[0].radius = 0.5;
+	spheres[0].radius = radius;
 	spheres[0].color = vec3(0.9,0.5,0.7);
 
 	spheres[1].position = vec3(1.1,1.1, -2.0);
